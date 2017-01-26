@@ -1,0 +1,38 @@
+#! /usr/bin/env ruby
+
+require 'gli'
+
+include GLI::App
+
+program_desc 'Test test'
+version '1.0.0'
+subcommand_option_handling :normal
+arguments :strict
+synopsis_format :full
+
+accept Symbol do |val|
+  val.to_sym
+end
+accept Fixnum do |val|
+  val.to_i
+end
+
+desc 'Testing testing foo bar'
+command :deploy do |d|
+  d.command :exec do |subcmd|
+    subcmd.desc '0-based instance index'
+    subcmd.default_value 0
+    subcmd.arg_name 'INSTANCE'
+    subcmd.flag [:n, :instance], type: Fixnum
+
+    subcmd.desc 'Deployment target'
+    subcmd.arg_name 'TARGET'
+    subcmd.flag [:t, :target], type: Symbol
+
+    subcmd.action do |global_options, options, args|
+      puts 'fooooo'
+    end
+  end
+end
+
+exit run(ARGV)
